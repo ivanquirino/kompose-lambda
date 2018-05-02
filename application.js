@@ -1,12 +1,9 @@
 const compose = require('koa-compose')
-const isJSON = require('koa-is-json')
-const createError = require('http-errors')
 const debug = require('debug')('quirino:application')
 
 class Application {
   constructor () {
     this.middleware = []
-    this.env = process.env.NODE_ENV || 'development'
 
     this.context = {
       event: null,
@@ -31,52 +28,27 @@ class Application {
     return this
   }
 
-  compose () {
+  getComposed () {
     return compose(this.middleware)
   }
 
-  createContext () {
-    return Object.assign({}, this.context)
-  }
+  createContext (event, context, callback) {
+    const ctx = Object.assign({}, this.context)
 
-  respond (ctx, callback) {
-    if (!ctx.result.statusCode && !ctx.result.body) {
-      const error = createError(404)
+    ctx.event = event
+    ctx.context = context
+    ctx.callback = callback
 
-      ctx.result.statusCode = error.status
-
-      ctx.result.body = JSON.stringify({
-        error: error.name,
-        message: error.message
-      })
-    }
-
-    if (!ctx.result.statusCode && ctx.result.body) {
-      if (isJSON(ctx.result.body)) {
-        ctx.result.statusCode = 200
-        ctx.result.body = JSON.stringify(ctx.result.body)
-      }
-    }
-
-    callback(null, ctx.result)
-  }
-
-  error (err, callback) {
-    callback(err)
+    return ctx
   }
 
   getHandler () {
-    const fn = this.compose()
+    const fn = this.getComposed()
 
     const handler = (event, context, callback) => {
-      const ctx = this.createContext()
+      const ctx = this.createContext(event, context, callback)
 
-      ctx.event = event
-      ctx.context = context
-
-      fn(ctx)
-        .then(() => this.respond(ctx, callback))
-        .catch(err => this.error(err, callback))
+      fn(ctx).catch(err => callback(err))
     }
 
     return handler

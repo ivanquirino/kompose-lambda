@@ -24,5 +24,8 @@
   },
   "scripts": {
     "test": "yarn jest --coverage"
+  },
+  "engines": {
+    "node": "^8.10"
   }
 }

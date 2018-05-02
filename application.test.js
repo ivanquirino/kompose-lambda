@@ -11,8 +11,12 @@ test('application/json response', done => {
     await next()
   })
 
-  app.use(async ctx => {
+  app.use(async (ctx) => {
+    ctx.result.statusCode = 200
     ctx.result.body = {test: 'first', second: 'yo'}
+    ctx.result.body = JSON.stringify(ctx.result.body)
+
+    ctx.callback(null, ctx.result)
   })
 
   const handler = app.getHandler()
@@ -28,38 +32,6 @@ test('application/json response', done => {
 
     const body = JSON.parse(result.body)
     expect(typeof body).toBe('object')
-
-    done()
-  }
-
-  handler(event, context, callback)
-})
-
-test('application error 404', done => {
-  const event = {}
-  const context = {}
-
-  const app = new Quirino()
-
-  app.use(async (ctx, next) => {
-    ctx.result.headers['access-control-allow-origin'] = '*'
-    await next()
-  })
-
-  app.use(async ctx => {
-
-  })
-
-  const handler = app.getHandler()
-
-  const callback = (err, result) => {
-    if (err) {
-      throw err
-    }
-
-    expect(JSON.parse(result.body).error).toBe('NotFoundError')
-    expect(result.statusCode).toBe(404)
-    expect(result.isBase64Encoded).toBe(false)
 
     done()
   }
