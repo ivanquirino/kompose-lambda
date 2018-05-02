@@ -1,0 +1,19 @@
+{    
+  "plugins": ["node", "jest"],
+  "extends": ["eslint:recommended", "plugin:node/recommended", "plugin:jest/recommended", "standard"],    
+  "rules": {
+    "node/exports-style": ["error", "module.exports"],
+    "strict": ["error", "never"],
+    "node/no-unsupported-features": "error",
+    "max-len": ["error", {"code": 80}],
+    "complexity": ["error", 10],
+    "max-depth": ["error", 4],
+    "max-statements": ["warn", 25],
+    "max-nested-callbacks": ["error", 3],
+    "max-lines": ["error", {"skipBlankLines": true, "skipComments": true}],
+    "indent": ["error", 2]
+  },
+  "env": {
+    "jest/globals": true
+  }
+}
