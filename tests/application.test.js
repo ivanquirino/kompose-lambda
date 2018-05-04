@@ -1,4 +1,4 @@
-const Quirino = require('./application')
+const Quirino = require('../lib/application')
 
 test('application/json response', done => {
   const event = {}
@@ -6,12 +6,12 @@ test('application/json response', done => {
 
   const app = new Quirino()
 
-  app.use(async (ctx, next) => {
+  app.use((ctx, next) => {
     ctx.result.headers['access-control-allow-origin'] = '*'
-    await next()
+    next()
   })
 
-  app.use(async (ctx) => {
+  app.use((ctx) => {
     ctx.result.statusCode = 200
     ctx.result.body = {test: 'first', second: 'yo'}
     ctx.result.body = JSON.stringify(ctx.result.body)
@@ -39,36 +39,10 @@ test('application/json response', done => {
   handler(event, context, callback)
 })
 
-test('application unhandled', done => {
-  const event = {}
-  const context = {}
-
-  const app = new Quirino()
-
-  app.use(async (ctx, next) => {
-    ctx.result.headers['access-control-allow-origin'] = '*'
-    await next()
-  })
-
-  app.use(async ctx => {
-    throw new Error()
-  })
-
-  const handler = app.getHandler()
-
-  const callback = (err, result) => {
-    expect(err).toBeInstanceOf(Error)
-
-    done()
-  }
-
-  handler(event, context, callback)
-})
-
 test('non function middleware', () => {
   const app = new Quirino()
 
   expect(() => {
-    app.use('')
+    app.use('non-function')
   }).toThrow()
 })

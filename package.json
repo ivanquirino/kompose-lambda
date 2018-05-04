@@ -2,7 +2,7 @@
   "name": "quirino-lambda",
   "version": "0.0.1",
   "description": "Promise chain middleware for AWS Lambda + API Gateway",
-  "main": "application.js",
+  "main": "lib/application.js",
   "author": "Ivan Quirino",
   "license": "MIT",
   "private": true,
@@ -26,6 +26,6 @@
     "test": "yarn jest --coverage"
   },
   "engines": {
-    "node": "^8.10"
+    "node": ">=6"
   }
 }

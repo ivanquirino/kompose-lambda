@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create context 1`] = `
+Object {
+  "callback": [Function],
+  "context": Object {},
+  "customContext": Object {},
+  "event": Object {},
+  "result": Object {
+    "body": "",
+    "headers": Object {},
+    "isBase64Encoded": false,
+    "statusCode": null,
+  },
+}
+`;
