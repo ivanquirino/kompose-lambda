@@ -2,7 +2,7 @@
 
 **Work in Progress!**
 
-Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware. Each middleware function called is wrapped in a `Promise` allowing to be awaited. 
+Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware. Each middleware function called is wrapped in a `Promise` allowing them to be awaited. 
 
 Uses [koa-compose](https://github.com/koajs/compose) and is heavily inspired by Koa.
 
