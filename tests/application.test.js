@@ -1,10 +1,10 @@
-const Quirino = require('../lib/application')
+const KomposeLambda = require('../lib/application')
 
-test('application/json response', done => {
+test('application/json response usage example', done => {
   const event = {}
   const context = {}
 
-  const app = new Quirino()
+  const app = new KomposeLambda()
 
   app.use((ctx, next) => {
     ctx.result.headers['access-control-allow-origin'] = '*'
@@ -21,14 +21,11 @@ test('application/json response', done => {
 
   const handler = app.getHandler()
 
-  const callback = (err, result) => {
-    if (err) {
-      throw err
-    }
-
+  const callback = (theError, result) => {
     expect(typeof result.body).toBe('string')
     expect(result.statusCode).toBe(200)
     expect(result.isBase64Encoded).toBe(false)
+    expect(result.headers['access-control-allow-origin']).toBe('*')
 
     const body = JSON.parse(result.body)
     expect(typeof body).toBe('object')
@@ -39,10 +36,84 @@ test('application/json response', done => {
   handler(event, context, callback)
 })
 
+test('use should return instance of application', () => {
+  const app = new KomposeLambda()
+
+  const app2 = app.use(() => {})
+
+  expect(app2).toBeInstanceOf(KomposeLambda)
+})
+
+test('getHandler should return a 3 parameter function', () => {
+  const app = new KomposeLambda()
+
+  const handler = app.getHandler()
+
+  expect(handler).toHaveLength(3)
+})
+
+test('handler should return a promise', () => {
+  const app = new KomposeLambda()
+
+  expect(app.getHandler()({}, {}, () => {}))
+    .toBeInstanceOf(Promise)
+})
+
 test('non function middleware', () => {
-  const app = new Quirino()
+  const app = new KomposeLambda()
 
   expect(() => {
     app.use('non-function')
   }).toThrow()
+})
+
+test('invalid options should throw', () => {
+  const invalidOpts = [
+    {
+      createContext: 'test'
+    },
+    {
+      afterChain: 3
+    },
+    {
+      handleError: {}
+    }
+  ]
+
+  invalidOpts.forEach(opts => {
+    expect(() => {
+      KomposeLambda(opts)
+    }).toThrow(TypeError)
+  })
+})
+
+test('should use provided createContext and afterChain function', done => {
+  const opts = {
+    createContext: jest.fn(),
+    afterChain: jest.fn()
+  }
+
+  const app = new KomposeLambda(opts)
+
+  app.getHandler()({}, {}, () => {})
+    .then(() => {
+      expect(opts.createContext).toHaveBeenCalled()
+      done()
+    })
+})
+
+test('should use provided handleError function', () => {
+  const opts = {handleError: jest.fn()}
+
+  const app = new KomposeLambda(opts)
+  app.use(() => {
+    return Promise((resolve, reject) => {
+      reject(new Error())
+    })
+  })
+
+  app.getHandler()({}, {}, () => {})
+    .then(() => {
+      expect(opts.handleError).toHaveBeenCalled()
+    })
 })
