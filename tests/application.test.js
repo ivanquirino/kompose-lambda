@@ -73,9 +73,6 @@ test('invalid options should throw', () => {
       createContext: 'test'
     },
     {
-      afterChain: 3
-    },
-    {
       handleError: {}
     }
   ]
@@ -88,7 +85,7 @@ test('invalid options should throw', () => {
   })
 })
 
-test('should use provided createContext and afterChain function', done => {
+test('should use provided createContext function', done => {
   const opts = {
     createContext: jest.fn(),
     afterChain: jest.fn()
@@ -116,5 +113,33 @@ test('should use provided handleError function', () => {
   app.getHandler()({}, {}, () => {})
     .then(() => {
       expect(opts.handleError).toHaveBeenCalled()
+    })
+})
+
+test('final handler must be a function', () => {
+  const app = new KomposeLambda()
+  expect(() => {
+    app.final('')
+  }).toThrow()
+})
+
+test('call final handler if provided', done => {
+  const app = new KomposeLambda()
+  const finalHandler = jest.fn()
+  app.final(finalHandler)
+
+  app.getHandler()({}, {}, () => {})
+    .then(() => {
+      expect(finalHandler).toHaveBeenCalled()
+      done()
+    })
+
+  const app2 = new KomposeLambda()
+  const finalHandler2 = jest.fn()
+
+  app2.getHandler()({}, {}, () => {})
+    .then(() => {
+      expect(finalHandler2).not.toHaveBeenCalled()
+      done()
     })
 })
