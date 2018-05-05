@@ -1,12 +1,15 @@
 language: node_js
+
 sudo: false
+
 node_js:
   - "7"
   - "8"
   - "9"
   - "10"
- cache: yarn
- install:
-    - yarn
-  script:
-    - yarn test
+
+cache: yarn
+
+install: yarn
+
+script: yarn test
