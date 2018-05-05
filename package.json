@@ -5,7 +5,7 @@
   "main": "lib/application.js",
   "author": "Ivan Quirino",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
