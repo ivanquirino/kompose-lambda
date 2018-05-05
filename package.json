@@ -23,7 +23,7 @@
     "koa-is-json": "^1.0.0"
   },
   "scripts": {
-    "test": "yarn jest --coverage"
+    "test": "yarn eslint lib/ tests/ && yarn jest --coverage"
   },
   "engines": {
     "node": ">=6"

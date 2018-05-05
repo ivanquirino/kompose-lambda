@@ -82,7 +82,8 @@ test('invalid options should throw', () => {
 
   invalidOpts.forEach(opts => {
     expect(() => {
-      KomposeLambda(opts)
+      const app = (new KomposeLambda(opts))
+      app.getHandler()
     }).toThrow(TypeError)
   })
 })

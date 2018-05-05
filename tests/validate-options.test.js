@@ -43,3 +43,7 @@ test('should return `true` if none of the properties are used', () => {
 
   expect(validateOptions(opts)).toBe(true)
 })
+
+test('no options', () => {
+  expect(validateOptions()).toBe(true)
+})
