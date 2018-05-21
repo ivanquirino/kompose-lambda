@@ -2,9 +2,13 @@
 
 **Work in Progress! It is not published yet on npm.**
 
-Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware. Each middleware function called is wrapped in a `Promise` allowing them to be awaited. 
+Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware functions that can be awaited.
 
 Uses [koa-compose](https://github.com/koajs/compose) and is heavily inspired by Koa.
+
+For it to work, your middleware functions must be `async` functions or return a `Promise`
+
+Example:
 
 ```javascript
 const KomposeLambda = require('kompose-lambda')
@@ -28,6 +32,14 @@ chain.final(ctx => {
   ctx.callback(null, ctx.result)
 })
 
+// Register an error handler to catch any errors
+// Note that the middleware must be async function or
+// return a promise
+chain.error((err,ctx) => {
+  console.error(err)
+})
+
+// Get the handler
 exports.myHandler = chain.getHandler()
 
 ```

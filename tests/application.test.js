@@ -101,18 +101,20 @@ test('should use provided createContext function', done => {
 })
 
 test('should use provided handleError function', () => {
-  const opts = {handleError: jest.fn()}
+  const errorHandler = jest.fn()
 
-  const app = new KomposeLambda(opts)
+  const app = new KomposeLambda()
   app.use(() => {
     return Promise((resolve, reject) => {
       reject(new Error())
     })
   })
 
+  app.error(errorHandler)
+
   app.getHandler()({}, {}, () => {})
     .then(() => {
-      expect(opts.handleError).toHaveBeenCalled()
+      expect(errorHandler).toHaveBeenCalled()
     })
 })
 
