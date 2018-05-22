@@ -4,7 +4,7 @@
 
 Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware functions that can be awaited.
 
-Uses [koa-compose](https://github.com/koajs/compose) and is heavily inspired by Koa.
+Uses [koa-compose](https://github.com/koajs/compose) and is heavily inspired by Koa. In fact, this wouldn't be possible if it weren't for these two great projects.
 
 For it to work, your middleware functions must be `async` functions or return a `Promise`
 
@@ -110,3 +110,7 @@ Adds a final function to the chain which is called only with the `ctx` argument.
 ### chain.error(function)
 
 Adds an error handler to the chain. If your middleware functions are all `async` or return a `Promise`, you can catch any errors in the chain, considering you have not handled the error before. Receives `err` and `ctx` arguments
+
+## Contributing
+
+If you have an issue, question or bug to report, please feel fre to open an issue. I'll try my best to answer or fix any issue. Feel free to open a PR if you want.
