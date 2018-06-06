@@ -145,3 +145,54 @@ test('call final handler if provided', done => {
       done()
     })
 })
+
+test('middleware function returning a promise', done => {
+  const app = new KomposeLambda()
+
+  const body = {a: 'b'}
+  const jsonBody = JSON.stringify(body)
+
+  app.use(ctx => {
+    ctx.result.body = body
+  })
+
+  app.final(ctx => {
+    ctx.result.body = JSON.stringify(ctx.result.body)
+    return new Promise((resolve, reject) => {
+      resolve(ctx.result)
+    })
+  })
+
+  const handler = app.getHandler()
+
+  const result = handler({}, {})
+  result.then(res => {
+    expect(res.body).toBe(jsonBody)
+    done()
+  })
+})
+
+test('middleware function returning a promise throw error', done => {
+  const app = new KomposeLambda()
+
+  app.use(ctx => {
+    return new Promise((resolve, reject) => {
+      reject(new Error('test error'))
+    })
+  })
+
+  app.error((err, ctx) => {
+    ctx.result.body = err.message
+    return new Promise((resolve, reject) => {
+      reject(ctx.result)
+    })
+  })
+
+  const handler = app.getHandler()
+
+  const result = handler({}, {})
+  result.catch(err => {
+    expect(err.body).toBe('test error')
+    done()
+  })
+})
