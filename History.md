@@ -1,3 +1,6 @@
+# 0.2.3
+* Fix typo in Readme.me
+
 # 0.2.2
 * Fix bug where `createDefaultContext()` wouldn't return a fresh new context
 

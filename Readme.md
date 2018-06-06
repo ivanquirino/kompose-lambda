@@ -50,7 +50,7 @@ module.exports.myHandler = chain.getHandler()
 
 ```
 
-Second example returning in final handler (Node 8.10:
+Second example returning in final handler (Node.js 8.10):
 
 ```javascript
 const KomposeLambda = require('kompose-lambda')
