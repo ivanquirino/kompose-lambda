@@ -1,4 +1,5 @@
 # Kompose Lambda
+[![Build Status](https://travis-ci.com/ivanquirino/kompose-lambda.svg?branch=master)](https://travis-ci.com/ivanquirino/kompose-lambda)
 
 **Work in Progress! It is not published yet on npm.**
 
