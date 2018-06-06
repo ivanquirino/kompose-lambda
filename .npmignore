@@ -1,2 +1,10 @@
 tests/
-.eslint
+coverage/
+.eslintrc
+.travis.yml
+.gitignore
+.github
+AUTHORS
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+PULL_REQUEST_TEMPLATE.md
