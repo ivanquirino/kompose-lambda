@@ -50,6 +50,49 @@ module.exports.myHandler = chain.getHandler()
 
 ```
 
+Second example returning in final handler (Node 8.10:
+
+```javascript
+const KomposeLambda = require('kompose-lambda')
+
+const chain = new KomposeLambda()
+
+// It is also possible to add an error handler first so you can build error responses
+chain.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch(e) {
+    ctx.result.statusCode = 500
+    ctxt.result.body = e.name
+  }
+})
+
+// Add middleware to the chain
+chain.use(async (ctx, next) => {
+  const body = ctx.event.body
+  ctx.result.body = {first: `Hello, ${body.name}'s `}
+  await next()
+  ctx.result.body.third = '!'
+})
+
+chain.use(ctx => {
+  ctx.result.body.second = 'World'
+})
+
+// Register handler to be called after all middleware
+// Useful to handle default responses
+chain.final(ctx => {
+  ctx.result.statusCode = ctx.result.statusCode || 200
+  ctx.result.headers['Content-Type'] = 'text/plain'
+  ctx.result.body = JSON.stringify(ctx.result.body)
+  return ctx.result
+})
+
+// Get the handler
+module.exports.myHandler = chain.getHandler()
+
+```
+
 ## Installation
 
 ```shell
@@ -107,11 +150,11 @@ Adds a middleware function to the chain, which will be called with `ctx` and `ne
 
 ### chain.final(function)
 
-Adds a final function to the chain which is called only with the `ctx` argument. It is useful to handle default responses, or to handle whatever you want before calling the response callback.
+Adds a final function to the chain which is called only with the `ctx` argument. It is useful to handle default responses, or to handle whatever you want before calling the response callback. It is also possible to return a promise or return in an async function.
 
 ### chain.error(function)
 
-Adds an error handler to the chain. If your middleware functions are all `async` or return a `Promise`, you can catch any errors in the chain, considering you have not handled the error before. Receives `err` and `ctx` arguments
+Adds an error handler to the chain to . If your middleware functions are all `async` or return a `Promise`, you can catch any errors in the chain, considering you have not handled the error before. Receives `err` and `ctx` arguments. If you return instead of calling the `callback` argument from `ctx`, you are returning an error to AWS.
 
 ## Contributing
 
