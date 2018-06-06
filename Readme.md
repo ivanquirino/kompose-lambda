@@ -1,8 +1,6 @@
 # Kompose Lambda
 [![Build Status](https://travis-ci.com/ivanquirino/kompose-lambda.svg?branch=master)](https://travis-ci.com/ivanquirino/kompose-lambda)
 
-**Work in Progress! It is not published yet on npm.**
-
 Write AWS Lambda handlers in a [Koa](https://github.com/koajs/koa) way, a chain of middleware functions that can be awaited.
 
 Uses [koa-compose](https://github.com/koajs/compose) and is heavily inspired by Koa. In fact, this wouldn't be possible if it weren't for these two great projects.
@@ -54,9 +52,12 @@ module.exports.myHandler = chain.getHandler()
 
 ## Installation
 
-Add this to your dependencies on `package.json`:
-```json
-"kompose-lambda": "ivanquirino/kompose-lambda"
+```shell
+yarn add kompose-lambda"
+```
+or
+```shell
+npm install --save kompose-lambda"
 ```
 ## API
 
