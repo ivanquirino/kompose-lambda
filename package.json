@@ -1,6 +1,6 @@
 {
   "name": "kompose-lambda",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Compose Promise chain middleware like Koa for AWS Lambda + API Gateway",
   "main": "lib/application.js",
   "author": "Ivan Quirino",
